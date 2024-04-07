@@ -1,0 +1,37 @@
+.pokemon-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  /* border: 1px solid #ccc; */
+  border-radius: 8px;
+  padding: 16px;
+  width: 260px;
+  height: auto;
+  margin: 10px;
+  background-color: #F7F7F9;
+  box-shadow: 2px 2px 4px 0px #00000026;
+}
+
+.pokemon-number {
+  font-family: "Roboto", sans-serif;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 25.78px;
+  text-align: left;
+  color: #373299;
+  width: 100%;
+}
+
+.pokemon-image {
+  width: 260px;
+  height: auto;
+}
+
+.pokemon-name {
+  font-family: "Roboto", sans-serif;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 25.78px;
+  text-align: center;
+  color: #373299;
+}

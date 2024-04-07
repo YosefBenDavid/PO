@@ -1,0 +1,22 @@
+/* PokemonList.css */
+
+.pokemon-list-container{
+    padding: 50px 25px;
+}
+
+.pokemon-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Distribute items evenly in each row */
+}
+
+.load-more-button {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 60px;
+  background-color: #ffffff;
+  color: #373299;
+  border: 1px solid #373299;
+  border-radius: 9px;
+  cursor: pointer;
+}
