@@ -81,7 +81,7 @@ function PokemonList() {
     <div className="pokemon-list-container">
       <div className="search-bar">
         <input
-          type="text"
+          type="search"
           placeholder="Search Pokemon..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
