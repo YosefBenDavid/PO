@@ -24,7 +24,7 @@
   height: 100%;
 }
 
-.button {
+.header .button {
   display: flex;
   align-items: center;
   padding: 0px 16px;
@@ -37,18 +37,19 @@
   font-size: 16px;
   font-weight: 400;
   line-height: 18.75px;
+  text-decoration: none;
 }
 
-.button:hover {
+.header .button:hover {
     background-color: #151483;
     color: white;
 }
 
-.button.active{
+.header .button.active{
     background-color: #94D97E;
     color: #000000;
 }
 
-.button.active:hover{
+.header .button.active:hover{
     background-color: #7DC665;
 }

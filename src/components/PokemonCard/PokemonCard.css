@@ -1,15 +1,20 @@
 .pokemon-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  /* border: 1px solid #ccc; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   border-radius: 8px;
   padding: 16px;
   width: 260px;
   height: auto;
   margin: 10px;
-  background-color: #F7F7F9;
+  background-color: #f7f7f9;
   box-shadow: 2px 2px 4px 0px #00000026;
+  cursor: pointer;
+  transition: transform 0.3s ease; /* Add transition for smooth effect */
+}
+
+.pokemon-card:hover {
+  transform: translateY(-5px); /* Move the card up slightly on hover */
 }
 
 .pokemon-number {

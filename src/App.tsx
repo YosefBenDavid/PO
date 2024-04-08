@@ -1,16 +1,15 @@
-import './App.css';
-import React from 'react';
-// import Favorites from './pages/Header/Header.tsx';
-// import Home from './pages/Home/Home.tsx';
-import Header from './components/Header/Header.tsx';
-import PokemonList from './components/PokemonList/PokemonList.tsx';
-// import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import "./App.css";
+import React from "react";
+import { Outlet } from "react-router-dom";
+import Header from "./components/Header/Header";
+// import PokemonList from "./components/PokemonList/PokemonList";
+// import PokemonGrid from "./components/PokemonGrid/PokemonGrid";
 
 function App() {
   return (
     <>
       <Header />
-      <PokemonList />
+      <Outlet />
     </>
   );
 }
