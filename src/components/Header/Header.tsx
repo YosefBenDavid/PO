@@ -1,21 +1,38 @@
-import React from "react";
-import { Link } from "react-router-dom"; // Import BrowserRouter and Link
-import "./Header.css";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import "./Header.scss";
 import logo from "../../assets/pokedexLogo.svg";
 
 function Header() {
+  const [activeButton, setActiveButton] = useState<string>("home");
+
+  const handleButtonClick = (buttonName: string) => {
+    setActiveButton(buttonName);
+  };
+
   return (
     <>
       <header className="header">
         <div className="logo">
-          <img src={logo} alt="Logo" className="logoImage" />
+          <Link to="/">
+            <img src={logo} alt="Logo" className="logoImage" />
+          </Link>
         </div>
         <div className="buttonsContainer">
-          {/* Use Link component instead of div for navigation */}
-          <Link to="/" className="button">
+          <Link
+            to="/"
+            className={`button ${activeButton === "home" ? "active" : ""}`}
+            onClick={() => handleButtonClick("home")}
+          >
             Home
           </Link>
-          <Link to="/favorites" className="button">
+          <Link
+            to="/favorites"
+            className={`button ${
+              activeButton === "favorites" ? "active" : ""
+            }`}
+            onClick={() => handleButtonClick("favorites")}
+          >
             Favorites
           </Link>
         </div>

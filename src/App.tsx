@@ -2,6 +2,7 @@ import "./App.css";
 import React from "react";
 import { Outlet } from "react-router-dom";
 import Header from "./components/Header/Header";
+import './Styles/Global.scss';
 // import PokemonList from "./components/PokemonList/PokemonList";
 // import PokemonGrid from "./components/PokemonGrid/PokemonGrid";
 

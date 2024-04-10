@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import "./PokemonList.css";
+import "./PokemonList.scss";
 import PokemonCard from "../PokemonCard/PokemonCard";
 import { Link } from "react-router-dom";
+import { extractPokemonNumberURL } from '../../Utilities/Utillities';
 
 type Pokemon = {
   name: string;
@@ -9,14 +10,6 @@ type Pokemon = {
   number: string;
   type: string[];
   image: string;
-  stats: {
-    HP: number;
-    Attack: number;
-    Defense: number;
-    "Special Attack": number;
-    "Special Defense": number;
-    Speed: number;
-  };
 };
 
 function PokemonList() {
@@ -64,39 +57,16 @@ function PokemonList() {
     const response = await fetch(pokemon.url);
     const data = await response.json();
 
-    const stats = data.stats.reduce(
-      (
-        acc: { [key: string]: number },
-        stat: { base_stat: number; stat: { name: string } }
-      ) => {
-        acc[stat.stat.name] = stat.base_stat;
-        return acc;
-      },
-      {}
-    );
-
     return {
       name: pokemon.name,
       url: pokemon.url,
-      number: extractPokemonNumber(pokemon.url),
+      number: extractPokemonNumberURL(pokemon.url),
       image: data.sprites.front_default,
       type: data.types.map((typeInfo: { type: Pokemon }) => typeInfo.type.name),
-      stats: {
-        HP: stats.hp,
-        Attack: stats.attack,
-        Defense: stats.defense,
-        "Special Attack": stats["special-attack"],
-        "Special Defense": stats["special-defense"],
-        Speed: stats.speed,
-      },
     };
   };
 
-  const extractPokemonNumber = (url: string): string => {
-    const segments = url.split("/");
-    const number = segments[segments.length - 2].padStart(3, "0");
-    return `#${number}`;
-  };
+
 
   const handleSearch = () => {
     const filteredResults = pokemonList.filter(
@@ -151,8 +121,8 @@ function PokemonList() {
             }
             // Add the filtered Pokemon to the search result list
             setPokemonList((pokemonList) => [
-                ...pokemonList,
-                ...pokemonWithDetails,
+              ...pokemonList,
+              ...pokemonWithDetails,
             ]);
             setNextPage(data.next);
             setSearchTrigger(!searchTrigger); // Toggle the searchTrigger state to force a re-render
@@ -197,7 +167,7 @@ function PokemonList() {
         <div id="search-suggestions-container">
           <input
             type="text"
-            placeholder="Search Pokemon..."
+            placeholder=""
             value={searchTerm}
             onChange={handleInputChange}
             onClick={handleInputClick}
@@ -236,17 +206,14 @@ function PokemonList() {
       <div className="pokemon-list">
         {(searchResult.length === 0 ? pokemonList : searchResult).map(
           (pokemon, index) => (
-            <Link
-            key={index}
-            to={`/pokemon/${pokemon.name}`}
-          >
-            <PokemonCard
-              key={index}
-              number={pokemon.number}
-              img={pokemon.image}
-              name={pokemon.name}
-            />
-          </Link>
+            <Link key={index} to={`/pokemon/${pokemon.name}`}>
+              <PokemonCard
+                key={index}
+                number={pokemon.number}
+                img={pokemon.image}
+                name={pokemon.name}
+              />
+            </Link>
           )
         )}
       </div>
