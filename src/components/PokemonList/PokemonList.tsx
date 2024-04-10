@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./PokemonList.scss";
 import PokemonCard from "../PokemonCard/PokemonCard";
 import { Link } from "react-router-dom";
-import { extractPokemonNumberURL } from '../../Utilities/Utillities';
+import { extractPokemonNumberURL } from "../../Utilities/Utillities";
+import SearchBar from "../SearchBar/SearchBar";
 
 type Pokemon = {
   name: string;
@@ -23,8 +24,11 @@ function PokemonList() {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
+  const baseUrl: string = process.env.REACT_APP_BASE_URL || "";
+
+
   useEffect(() => {
-    fetch("https://pokeapi.co/api/v2/pokemon?limit=12&offset=0")
+    fetch(`${baseUrl}pokemon?limit=12&offset=0`)
       .then((response) => response.json())
       .then((data) => {
         // Fetch additional details for each Pokemon
@@ -66,8 +70,6 @@ function PokemonList() {
     };
   };
 
-
-
   const handleSearch = () => {
     const filteredResults = pokemonList.filter(
       (pokemon) =>
@@ -80,7 +82,7 @@ function PokemonList() {
 
     setSearchResult(filteredResults);
     setSearchTrigger(!searchTrigger);
-    setSuggestionsTrigger(false); // Assuming you have a state variable called setSuggestionsTrigger
+    setSuggestionsTrigger(false);
 
     // Filter suggestions based on input value
     const filteredSuggestions = searchHistory.filter((historyItem) =>
@@ -163,46 +165,18 @@ function PokemonList() {
 
   return (
     <div className="pokemon-list-container">
-      <div className="search-bar">
-        <div id="search-suggestions-container">
-          <input
-            type="text"
-            placeholder=""
-            value={searchTerm}
-            onChange={handleInputChange}
-            onClick={handleInputClick}
-            list="search-suggestions"
-          />
-          {suggestionsTrigger && suggestions.length > 0 && (
-            <ul id="search-suggestions">
-              <li className="search-suggestions-header">
-                <div className="recent_searches">RECENT SEARCHES</div>
-                <div className="clear" onClick={handleDeleteSuggestions}>
-                  CLEAR
-                </div>
-              </li>
-              {suggestions.map((suggestion, index) => (
-                <li key={index}>
-                  <div
-                    className="search-suggestions-word"
-                    onClick={() => handleSuggestionClick(suggestion)}
-                  >
-                    {suggestion}
-                  </div>
-                  <div
-                    className="suggestion-delete-button"
-                    onClick={() => handleDeleteSuggestion(index)}
-                  >
-                    X
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+      <SearchBar
+        searchTerm={searchTerm}
+        suggestionsTrigger={suggestionsTrigger}
+        suggestions={suggestions}
+        handleInputChange={handleInputChange}
+        handleInputClick={handleInputClick}
+        handleDeleteSuggestions={handleDeleteSuggestions}
+        handleSuggestionClick={handleSuggestionClick}
+        handleDeleteSuggestion={handleDeleteSuggestion}
+        handleSearch={handleSearch}
+      />
 
-        <button onClick={handleSearch}>Search</button>
-      </div>
       <div className="pokemon-list">
         {(searchResult.length === 0 ? pokemonList : searchResult).map(
           (pokemon, index) => (
@@ -217,11 +191,12 @@ function PokemonList() {
           )
         )}
       </div>
+
       {nextPage && (
         <button
           className="load-more-button"
           onClick={loadMorePokemon}
-          disabled={loading} // Disable the button when loading
+          disabled={loading}
         >
           {loading ? "Loading..." : "Load more..."}
         </button>

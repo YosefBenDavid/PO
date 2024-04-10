@@ -34,67 +34,62 @@ function getPokemonNameFromUrl() {
 
 const PokemonGrid: React.FC = () => {
   const pokemonName = getPokemonNameFromUrl();
-  console.log(pokemonName);
 
   const [pokemon, setPokemon] = useState<Pokemon | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  interface FlavorTextEntry {
+    language: {
+      name: string;
+    };
+    flavor_text: string;
+  }
+  
   useEffect(() => {
-    fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`)
-      .then((response) => response.json())
-      .then((data) => {
-        // Fetch additional details for each Pokemon
-        const fetchedPokemon: Pokemon = {
-          name: data.name,
-          number: data.id.toString(),
-          image: data.sprites.front_default,
-          type: data.types.map(
-            (type: { type: { name: string } }) => type.type.name
-          ),
-          description: "", // Initially set to empty string
+    const fetchPokemon = async () => {
+      try {
+        const pokemonResponse = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
+        const speciesResponse = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemonName}`);
+  
+        const pokemonData = await pokemonResponse.json();
+        const speciesData = await speciesResponse.json();
+  
+        const description: FlavorTextEntry | undefined = speciesData.flavor_text_entries.find(
+          (entry: FlavorTextEntry) => entry.language.name === "en"
+        );
+  
+        const fetchedPokemon = {
+          name: pokemonData.name,
+          number: pokemonData.id.toString(),
+          image: pokemonData.sprites.front_default,
+          type: pokemonData.types.map((type: { type: { name: string } }) => type.type.name),
+          description: description ? description.flavor_text : "No data collected",
           stats: {
-            HP: data.stats[0].base_stat,
-            Attack: data.stats[1].base_stat,
-            Defense: data.stats[2].base_stat,
-            "Special Attack": data.stats[3].base_stat,
-            "Special Defense": data.stats[4].base_stat,
-            Speed: data.stats[5].base_stat,
+            HP: pokemonData.stats[0].base_stat,
+            Attack: pokemonData.stats[1].base_stat,
+            Defense: pokemonData.stats[2].base_stat,
+            "Special Attack": pokemonData.stats[3].base_stat,
+            "Special Defense": pokemonData.stats[4].base_stat,
+            Speed: pokemonData.stats[5].base_stat,
           },
         };
+  
         setPokemon(fetchedPokemon);
-        setIsLoading(false); // Set loading to false after data is fetched
-      })
-      .catch((error) => {
+        setIsLoading(false);
+      } catch (error) {
         console.error("Error fetching Pokemon:", error);
-        setIsLoading(false); // Set loading to false in case of error
-      });
-  }, []);
-
-  useEffect(() => {
-    fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemonName}`)
-      .then((response) => response.json())
-      .then((data) => {
-        const description = data.flavor_text_entries.find(
-          (entry: { language: { name: string }; flavor_text: string }) =>
-            entry.language.name === "en" // Assuming you want English text
-        );
-        if (description) {
-          setPokemon((prevPokemon) => ({
-            ...prevPokemon!,
-            description: description.flavor_text,
-          }));
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching Pokemon description:", error);
-      });
-  }, [pokemonName]);
-
+        setIsLoading(false);
+      }
+    };
+  
+    fetchPokemon();
+  }, [pokemonName]); // Added dependency array to useEffect
+  
   return (
     <div className="pokemon-grid">
-      {isLoading ? ( // Display loading indicator while data is being fetched
+      {isLoading ? (
         <div>Loading...</div>
-      ) : pokemon ? ( // Display the component once data is fetched
+      ) : pokemon ? (
         <div className="pokemon-details-overlay">
           <Link className="back-btn" to="/">
           <img src={arrow} alt="arrow" className="arrow-logo" />
