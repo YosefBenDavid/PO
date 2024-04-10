@@ -1,0 +1,178 @@
+@import "../../Styles/Global.scss";
+
+.pokemon-grid {
+  margin: 40px 110px 0;
+  .pokemon-details-overlay {
+    .back-btn {
+        width: 100%;
+      display: flex;
+      text-decoration: none;
+      color: #020166;
+      font-family: $primary-font-family;
+      font-size: 18px;
+      font-weight: 400;
+    }
+    .pokemon-details {
+      position: relative;
+      display: flex;
+      box-shadow: 2px 2px 4px 0px #00000026;
+      max-width: 844px;
+      height: auto;
+      border-radius: 9px;
+      background-color: #f7f7f9;
+      margin: 15px 0;
+      width: fit-content;
+      align-items: center;
+      .like-logo {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+      }
+      .right-div {
+        display: flex;
+        flex-direction: column;
+        padding: 20px 20px 20px 40px;
+
+        .pokemon-description {
+          display: flex;
+          flex-direction: column;
+
+          h3 {
+            color: #373299;
+            font-family: $primary-font-family;
+            font-size: 22px;
+            font-weight: 600;
+            margin: 0;
+          }
+          p {
+            font-family: $primary-font-family;
+            font-size: 18px;
+            font-weight: 400;
+            color: #020166;
+            margin: 0;
+          }
+        }
+
+        .pokemon-stats {
+          margin-top: 20px;
+          h3 {
+            color: #373299;
+            font-family: $primary-font-family;
+            font-size: 22px;
+            font-weight: 600;
+            margin: 15px 0 0 0;
+          }
+
+          .stats-container {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            justify-content: space-between;
+
+            div,
+            .total {
+              p {
+                margin: 0;
+              }
+              display: flex;
+              flex-direction: column;
+              text-decoration: none;
+              list-style-type: none;
+              box-sizing: border-box;
+              padding: 5px;
+              font-family: $primary-font-family;
+              font-size: 18px;
+              font-weight: 400;
+              color: #020166;
+            }
+          }
+        }
+      }
+      .left-div {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 20px;
+        .pokemon-types {
+          display: flex;
+          justify-content: center;
+
+          p {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100px;
+            height: 35px;
+            border-radius: 9px;
+            margin: 20px 5px;
+            font-family: $primary-font-family;
+            font-size: 22px;
+            font-weight: 400;
+          }
+        }
+      }
+      .line {
+        height: 246px;
+        display: flex;
+        width: 1px;
+        background-color: #d7d7d7;
+      }
+      .pokemon-card {
+        box-shadow: none;
+        padding: 0;
+        margin: 0;
+        cursor: unset;
+        .pokemon-name {
+          font-family: $primary-font-family;
+          font-size: 32px;
+          font-weight: 400;
+        }
+        .pokemon-image {
+          width: 200px;
+        }
+        &:hover {
+          transform: unset;
+        }
+      }
+    }
+  }
+  @media (max-width: 750px) {
+    .pokemon-details-overlay {
+      justify-content: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .back-btn{
+        display: none;
+      }
+      .pokemon-details {
+        width: min-content;
+        flex-direction: column;
+        .line {
+          width: 246px;
+          display: flex;
+          height: 1px;
+        }
+        .right-div {
+          .pokemon-description {
+            text-align: center;
+          }
+          .pokemon-stats {
+            text-align: center;
+
+            .stats-container {
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+
+              div {
+                padding: 0;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

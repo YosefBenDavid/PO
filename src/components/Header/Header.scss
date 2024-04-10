@@ -1,0 +1,77 @@
+@import '../../Styles/Global.scss';
+
+$header-padding: 106px;
+$logo-width: 150px;
+
+.header {
+  display: flex;
+  align-items: center;
+  padding: 0 $header-padding;
+  height: 67px;
+  justify-content: space-between;
+  background-color: #020166;
+  color: #fff;
+
+  .logo {
+    display: flex;
+    align-items: center;
+
+    .logoImage {
+      width: $logo-width;
+      height: auto;
+    }
+  }
+
+  .buttonsContainer {
+    display: flex;
+    align-items: stretch;
+    height: 100%;
+  }
+
+  .button {
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    background-color: #020166;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    height: 100%;
+    font-family: "Roboto", sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 18.75px;
+    text-decoration: none;
+
+    &:hover {
+      background-color: #151483;
+      color: white;
+    }
+
+    &.active {
+      background-color: #94d97e;
+      color: #000000;
+
+      &:hover {
+        background-color: #7dc665;
+      }
+    }
+  }
+
+  @media (max-width: 750px) {
+    margin-top: 25px;
+    background-color: white;
+    padding: 0;
+    justify-content: center;
+    height: auto;
+
+    .button {
+      display: none;
+    }
+
+    .logo .logoImage {
+      width: 250px;
+      height: auto;
+    }
+  }
+}
