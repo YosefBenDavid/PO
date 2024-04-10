@@ -24,25 +24,32 @@ function PokemonList() {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const baseUrl: string = process.env.REACT_APP_BASE_URL || "";
+//   const baseUrl: string = process.env.REACT_APP_BASE_URL || "";
 
 
   useEffect(() => {
-    fetch(`${baseUrl}pokemon?limit=12&offset=0`)
-      .then((response) => response.json())
-      .then((data) => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=12&offset=0`);
+        // console.log(baseUrl);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
         // Fetch additional details for each Pokemon
-        Promise.all(
+        const pokemonDetails = await Promise.all(
           data.results.map((pokemon: Pokemon) => fetchPokemonDetails(pokemon))
-        ).then((pokemonWithDetails) => {
-          setPokemonList(pokemonWithDetails);
-          setNextPage(data.next);
-        });
-      })
-      .catch((error) => {
-        console.error("Error fetching Pokemon:", error);
-      });
+        );
+        setPokemonList(pokemonDetails);
+        setNextPage(data.next);
+      } catch (error) {
+        console.error('Error fetching Pokemon:', error);
+      }
+    };
+  
+    fetchData();
   }, []);
+  
 
   useEffect(() => {
     if (searchResult.length > 0) {
