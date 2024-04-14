@@ -1,0 +1,64 @@
+.loading-spinner-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+  
+  .loading-spinner {
+    width: 300px; /* Increase the size to show the whole image */
+    height: 300px; /* Increase the size to show the whole image */
+    position: relative;
+  }
+  
+  .filling-logo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("../../assets/pokedexLogo.svg");
+    background-size: contain; /* Show the whole image */
+    background-repeat: no-repeat;
+    background-position: center; /* Center the image */
+    opacity: 0.1; /* Initially hide the logo */
+  }
+  
+  .appearing-logo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%; /* Same width as the container */
+    height: 100%;
+    background-image: url("../../assets/pokedexLogo.svg");
+    background-size: contain; /* Show the whole image */
+    background-repeat: no-repeat;
+    background-position: center; /* Center the image */
+    animation: appearAnimation 1s linear forwards; /* Adjust animation duration as needed */
+    // animation: glow 1s infinite alternate;
+  }
+  
+  @keyframes appearAnimation {
+      100% {
+          clip-path: inset(0% 0% 0% 0%);
+          animation: glow infinite alternate;
+      }
+      0% {
+          clip-path: inset(0% 100% 0% 0%);
+      }
+  }
+//   @keyframes glow {
+//     from {
+//       box-shadow: 0 0 10px -10px #aef4af;
+//     }
+//     to {
+//       box-shadow: 0 0 10px 10px #aef4af;
+//     }
+//   }
+  
