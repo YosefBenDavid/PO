@@ -3,6 +3,7 @@ import { Loader } from "@googlemaps/js-api-loader";
 import "./DirectionsOnMap.scss";
 import pokeballIcon from "../../assets/4.svg";
 import locationPointerIcon from "../../assets/location-pointer-blue.svg";
+import { addMarkersAndRoute } from "../../Utilities/Utillities";
 
 const apiKey = import.meta.env.VITE_API_KEY;
 
@@ -35,56 +36,17 @@ const DirectionsOnMap: React.FC<PokemonLocations> = ({
             mapId: "myApp",
           };
 
-          const map = new google.maps.Map(
+          const map: google.maps.Map = new google.maps.Map(
             mapRef.current as HTMLDivElement,
             mapOptions
           );
 
-          const addMarkersAndRoute = () => {
-            const originMarker = new google.maps.Marker({
-              position: new google.maps.LatLng(32.064584, 34.771829),
-              map,
-              icon: {
-                url: locationPointerIcon,
-                scaledSize: new google.maps.Size(32, 32),
-              },
-            });
-
-            const destinationMarker = new google.maps.Marker({
-              position: new google.maps.LatLng(latitude, longitude),
-              map,
-              icon: {
-                url: pokeballIcon,
-                scaledSize: new google.maps.Size(32, 32),
-              },
-            });
-
-            const directionsService = new google.maps.DirectionsService();
-            const directionsRenderer = new google.maps.DirectionsRenderer({
-              map,
-              markerOptions: {
-                icon: { url: "" },
-              },
-            });
-
-            const request: google.maps.DirectionsRequest = {
-              origin: originMarker.getPosition() as google.maps.LatLng,
-              destination:
-                destinationMarker.getPosition() as google.maps.LatLng,
-              travelMode: google.maps.TravelMode.WALKING,
-            };
-
-            directionsService.route(request, (result, status) => {
-              if (status === google.maps.DirectionsStatus.OK) {
-                directionsRenderer.setDirections(result);
-              } else {
-                console.error("Error fetching directions:", status);
-              }
-            });
-          };
-
           if (showDirections) {
-            addMarkersAndRoute();
+            addMarkersAndRoute(
+              map,
+              locationPointerIcon,
+              pokeballIcon,
+            );
           }
         };
 
