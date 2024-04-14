@@ -9,26 +9,6 @@ export const extractPokemonNumber = (num: string): string => {
   return `#${number}`;
 };
 
-export type PokemonBackgroundColor =
-  | "normal"
-  | "fire"
-  | " water"
-  | "electric"
-  | "grass"
-  | "ice"
-  | "fighting"
-  | "poison"
-  | "ground"
-  | "flying"
-  | "bug"
-  | "psychic"
-  | "rock"
-  | "dragon"
-  | "ghost"
-  | "dark"
-  | "steel"
-  | "fairy";
-
 export const getPokemonType = (backgroundColor: string) => {
   switch (backgroundColor) {
     case "normal":
@@ -89,3 +69,91 @@ export const getPokemonType = (backgroundColor: string) => {
       return "#000000";
   }
 };
+
+export const MoveoLocation = {
+  latitude: 32.064584,
+  longitude: 34.771829,
+};
+
+const TelAvivBounds = {
+  north: 32.0853,
+  south: 32.056,
+  east: 34.7818,
+  west: 34.764889,
+};
+
+const generateRandomCoordinate = (min: number, max: number) => {
+  return Math.random() * (max - min) + min;
+};
+
+export const generateRandomPokemonLocation = () => {
+  const latitude = generateRandomCoordinate(
+    TelAvivBounds.south,
+    TelAvivBounds.north
+  );
+  const longitude = generateRandomCoordinate(
+    TelAvivBounds.west,
+    TelAvivBounds.east
+  );
+
+  return { latitude: latitude, longitude: longitude };
+};
+
+export const addMarkersAndRoute = (
+  map: google.maps.Map | null,
+  startIcon: string,
+  endIcon: string
+) => {
+  if (!map) {
+    console.error("Map is null. Cannot add markers and route.");
+    return;
+  }
+
+  const createMarker = (
+    position: google.maps.LatLngLiteral,
+    iconUrl: string
+  ) => {
+    return new google.maps.Marker({
+      position: position,
+      map: map,
+      icon: {
+        url: iconUrl,
+        scaledSize: new google.maps.Size(32, 32),
+      },
+    });
+  };
+
+  const originMarker = createMarker(
+    { lat: MoveoLocation.latitude, lng: MoveoLocation.longitude },
+    startIcon
+  );
+
+  const destinationLocation = generateRandomPokemonLocation();
+  const destinationMarker = createMarker(
+    { lat: destinationLocation.latitude, lng: destinationLocation.longitude },
+    endIcon
+  );
+
+  const directionsService = new google.maps.DirectionsService();
+  const directionsRenderer = new google.maps.DirectionsRenderer({
+    map: map,
+    markerOptions: {
+      icon: { url: "" },
+    },
+  });
+
+  const request: google.maps.DirectionsRequest = {
+    origin: originMarker.getPosition() as google.maps.LatLng,
+    destination: destinationMarker.getPosition() as google.maps.LatLng,
+    travelMode: google.maps.TravelMode.WALKING,
+  };
+
+  directionsService.route(request, (result, status) => {
+    if (status === google.maps.DirectionsStatus.OK) {
+      directionsRenderer.setDirections(result);
+    } else {
+      console.error("Error fetching directions:", status);
+    }
+  });
+};
+

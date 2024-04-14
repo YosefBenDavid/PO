@@ -4,6 +4,7 @@ import PokemonCard from "../PokemonCard/PokemonCard";
 import { Link } from "react-router-dom";
 import { extractPokemonNumberURL } from "../../Utilities/Utillities";
 import SearchBar from "../SearchBar/SearchBar";
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
 type Pokemon = {
   name: string;
@@ -30,6 +31,7 @@ function PokemonList() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=12&offset=0`);
         // console.log(baseUrl);
         if (!response.ok) {
@@ -42,15 +44,16 @@ function PokemonList() {
         );
         setPokemonList(pokemonDetails);
         setNextPage(data.next);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching Pokemon:', error);
+        setLoading(false);
       }
     };
   
     fetchData();
   }, []);
   
-
   useEffect(() => {
     if (searchResult.length > 0) {
       sessionStorage.setItem("searchResult", JSON.stringify(searchResult));
@@ -172,6 +175,7 @@ function PokemonList() {
 
   return (
     <div className="pokemon-list-container">
+      {loading && <LoadingSpinner />}
       <SearchBar
         searchTerm={searchTerm}
         suggestionsTrigger={suggestionsTrigger}
@@ -183,7 +187,7 @@ function PokemonList() {
         handleDeleteSuggestion={handleDeleteSuggestion}
         handleSearch={handleSearch}
       />
-
+  
       <div className="pokemon-list">
         {(searchResult.length === 0 ? pokemonList : searchResult).map(
           (pokemon, index) => (
@@ -198,7 +202,7 @@ function PokemonList() {
           )
         )}
       </div>
-
+  
       {nextPage && (
         <button
           className="load-more-button"
@@ -210,6 +214,7 @@ function PokemonList() {
       )}
     </div>
   );
+  
 }
 
 export default PokemonList;
