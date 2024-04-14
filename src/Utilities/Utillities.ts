@@ -9,26 +9,6 @@ export const extractPokemonNumber = (num: string): string => {
   return `#${number}`;
 };
 
-export type PokemonBackgroundColor =
-  | "normal"
-  | "fire"
-  | " water"
-  | "electric"
-  | "grass"
-  | "ice"
-  | "fighting"
-  | "poison"
-  | "ground"
-  | "flying"
-  | "bug"
-  | "psychic"
-  | "rock"
-  | "dragon"
-  | "ghost"
-  | "dark"
-  | "steel"
-  | "fairy";
-
 export const getPokemonType = (backgroundColor: string) => {
   switch (backgroundColor) {
     case "normal":
@@ -88,4 +68,24 @@ export const getPokemonType = (backgroundColor: string) => {
     default:
       return "#000000";
   }
+};
+
+export const MoveoLocation = {latitude: 32.06534075404604,longitude: 34.77193923811189};
+
+const TelAvivBounds = {
+  north: 32.0853,
+  south: 32.056,
+  east: 34.7818,
+  west: 34.764889
+};
+
+const generateRandomCoordinate = (min: number, max: number) => {
+  return Math.random() * (max - min) + min;
+};
+
+export const generateRandomPokemonLocation = () => {
+  const latitude = generateRandomCoordinate(TelAvivBounds.south, TelAvivBounds.north);
+  const longitude = generateRandomCoordinate(TelAvivBounds.west, TelAvivBounds.east);
+
+  return { latitude: latitude, longitude: longitude };
 };

@@ -2,16 +2,20 @@
 
 .pokemon-grid {
   margin: 40px 110px 0;
+  .back-btn {
+    width: 100%;
+    display: flex;
+    text-decoration: none;
+    color: #020166;
+    font-family: $primary-font-family;
+    font-size: 18px;
+    font-weight: 400;
+  }
+
   .pokemon-details-overlay {
-    .back-btn {
-        width: 100%;
-      display: flex;
-      text-decoration: none;
-      color: #020166;
-      font-family: $primary-font-family;
-      font-size: 18px;
-      font-weight: 400;
-    }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     .pokemon-details {
       position: relative;
       display: flex;
@@ -27,6 +31,13 @@
         position: absolute;
         top: 20px;
         right: 20px;
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        &:hover {
+          transform: translateY(-3px);
+        }
       }
       .right-div {
         display: flex;
@@ -144,7 +155,7 @@
       flex-direction: column;
       align-items: center;
 
-      .back-btn{
+      .back-btn {
         display: none;
       }
       .pokemon-details {

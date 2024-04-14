@@ -5,10 +5,12 @@ import PokemonCard from "../PokemonCard/PokemonCard";
 import {
   extractPokemonNumber,
   getPokemonType,
+  generateRandomPokemonLocation,
 } from "../../Utilities/Utillities";
-import heart from '../../assets/like.svg'
-import arrow from '../../assets/RightArrow.svg'
-
+import heart from "../../assets/heart.svg";
+import arrow from "../../assets/RightArrow.svg";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
+import DirectionsOnMap from "../DirectionsOnMap/DirectionsOnMap";
 
 type Pokemon = {
   name: string;
@@ -24,6 +26,7 @@ type Pokemon = {
     "Special Defense": number;
     Speed: number;
   };
+  pokemonLocations: { latitude: number; longitude: number };
 };
 
 function getPokemonNameFromUrl() {
@@ -44,26 +47,37 @@ const PokemonGrid: React.FC = () => {
     };
     flavor_text: string;
   }
-  
+
   useEffect(() => {
     const fetchPokemon = async () => {
       try {
-        const pokemonResponse = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
-        const speciesResponse = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemonName}`);
-  
+        const pokemonResponse = await fetch(
+          `https://pokeapi.co/api/v2/pokemon/${pokemonName}`
+        );
+        const speciesResponse = await fetch(
+          `https://pokeapi.co/api/v2/pokemon-species/${pokemonName}`
+        );
+
         const pokemonData = await pokemonResponse.json();
         const speciesData = await speciesResponse.json();
-  
-        const description: FlavorTextEntry | undefined = speciesData.flavor_text_entries.find(
-          (entry: FlavorTextEntry) => entry.language.name === "en"
-        );
-  
+
+        const description: FlavorTextEntry | undefined =
+          speciesData.flavor_text_entries.find(
+            (entry: FlavorTextEntry) => entry.language.name === "en"
+          );
+
+        const pokemonLocations = generateRandomPokemonLocation(); // Call the function here to generate random location
         const fetchedPokemon = {
           name: pokemonData.name,
           number: pokemonData.id.toString(),
           image: pokemonData.sprites.front_default,
-          type: pokemonData.types.map((type: { type: { name: string } }) => type.type.name),
-          description: description ? description.flavor_text : "No data collected",
+          type: pokemonData.types.map(
+            (type: { type: { name: string } }) => type.type.name
+          ),
+          description: description
+            ? description.flavor_text
+            : "No data collected",
+          pokemonLocations: pokemonLocations, // Assign the generated location to pokemonLocations field
           stats: {
             HP: pokemonData.stats[0].base_stat,
             Attack: pokemonData.stats[1].base_stat,
@@ -73,7 +87,7 @@ const PokemonGrid: React.FC = () => {
             Speed: pokemonData.stats[5].base_stat,
           },
         };
-  
+
         setPokemon(fetchedPokemon);
         setIsLoading(false);
       } catch (error) {
@@ -81,22 +95,22 @@ const PokemonGrid: React.FC = () => {
         setIsLoading(false);
       }
     };
-  
+
     fetchPokemon();
-  }, [pokemonName]); // Added dependency array to useEffect
-  
+  }, [pokemonName]);
+
   return (
     <div className="pokemon-grid">
+      <Link className="back-btn" to="/">
+        <img src={arrow} alt="arrow" className="arrow-logo" />
+        Back
+      </Link>
       {isLoading ? (
-        <div>Loading...</div>
+        <LoadingSpinner />
       ) : pokemon ? (
         <div className="pokemon-details-overlay">
-          <Link className="back-btn" to="/">
-          <img src={arrow} alt="arrow" className="arrow-logo" />
-            Back
-          </Link>
           <div className="pokemon-details">
-          <img src={heart} alt="like" className="like-logo" />
+            <img src={heart} alt="like" className="like-logo" />
             <div className="left-div">
               <PokemonCard
                 number={extractPokemonNumber(pokemon.number)}
@@ -147,6 +161,10 @@ const PokemonGrid: React.FC = () => {
               </div>
             </div>
           </div>
+          <DirectionsOnMap 
+            latitude ={pokemon?.pokemonLocations.latitude}
+            longitude ={pokemon?.pokemonLocations.longitude}
+          />
         </div>
       ) : (
         <div>No data available</div>
